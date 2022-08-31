@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: Private Docker Registry	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Private Docker Registry </h1>
+
+<h2>Introduction</h2>
+<p class="description">
+To date we have used the Docker public registry.  This is fine for testing, but not appropriate for production.  Today we will deploy our own private registry.
+</p>
+<hr>
+<h2>Part A: Provision the lab systems</h2>
+<p class="description">
+Design your own 'test' lab with the systems you need.
+</p>
+
+
+<hr>
+<h2>Part B: Run an 'open' local registry</h2>
+<p class="description">
+Our first task is to install and run a local, completely open registry.  Fortunately, it is packaged as a Docker container, so this should be quick and easy.
+</p>
+<ul>
+<li>
+Follow this <a href="https://docs.docker.com/registry/deploying/#run-a-local-registry">tutorial</a> up to "Storage Customization".  It is important that our registry store images somewhere other than 'inside' the container, we don't want to loose any.
+</li>
+</ul>
+
+<hr>
+<h2>Part C: Run an externally-accessible registry</h2>
+<p class="description">
+For production, we need to have a registry that is accessible to all the nodes on our network.
+</p>
+<ul>
+<li>Most of what you need to know is contained in the tutorial from Part B </li>
+<li>Use as self-signed certificate (Docker calls this "insecure") </li>
+<li>Create two users: developer and admin </li>
+<li>Test your access. </li>
+</ul>
+
+<hr>
+<h2>Part D: Grading</h2>
+<ul>
+<li>Demonstrate your registry to your instructor.  </li>
+<li>Submit a short document to eLearn answering the question, "What are the security risks of using a self-signed certificate?"
+</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  	<link rel="stylesheet" href="./jbl_labs.css"> 
+  	<title>
+		COMP-10097
+	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>COMP-10097 Virtual Infrastructure </h1>
+<p class="description">
+Welcome.  COMP-10097 is a project based course in which we will explore the key technologies required to build and support large virtual environments.  
+<ul>
+<li> <a href="./Introduction/Lecture.pdf">Course Overview(pdf)</a>
+</li>
+<li>Like many modern admins, we will use more than one distro. This <a href="./DistroDecoder/DistroDecoder.html">DistroDecoder</a> might come in handy.
+<li> <a href="./Introduction/DistroDiagram.pdf">My attempt to show the lineage of RHEL and Ubuntu (pdf)</a> </li>
+<li> <a href="./qa/qa.html">Support Matrix: (Which Labs work with which disro)</a>
+</li>
+</ul>
+</p>
+
+
+<hr>
+<h2>Introduction to Virtual Computing</h2>
+<p class="description">
+The best way to keep up to date is to read.  Today you will get a chance to read a selection of technical articles addressing the past, present, and future of virtualisation.
+</p>
+<ul> <li><a href="./Theory/Theory.html">Reading Assignment</a> </li>
+</ul>
+
+<hr>
+<h2>Introduction to Docker</h2>
+<ul>
+<li><a href="./IntroToDocker/IntroToDocker.html">Lab: Introduction to Docker</a> </li>
+</li>
+</ul>
+
+
+<hr>
+<h2>Docker 2 </h2>
+<ul>
+<li><a href="./IntroToDocker2/IntroToDocker2.html">Lab: Introduction to Docker - Part 2</a> </li>
+<li><a href="./IntroToDocker2/IntroToDocker2_hints.html">HINTS!!!</a>
+</ul>
+
+<hr>
+<h2>Red Hat 7 vs Ubuntu - Decision Time</h2>
+<p class="description">
+The move from CentOS 7 to RHEL 7 is not going as smoothly as we had hoped.  It is likely we will continue using Ubuntu as our reference.  If we use Ubuntu we will likely use 20.04.3 LTS, aka Focal Fossa. 
+</p>
+<hr>
+<h2>DRBD (<em>Tested with RHEL 7 and Ubuntu 20.04)</em></h2>
+<ul>
+<li><a href="./drbd/drbd_lab.html">Lab: DRBD</a>
+</li>
+</ul>
+
+<hr>
+<h2>HA Clusters <em>(Use CentOS 8 appliance supplied)</em></h2>
+<ul>
+<li> <a href="./Pacemaker/pacemaker_lab.html">Lab: HA Clusters with Pacemaker</a> </li>
+</ul>
+
+<hr>
+<h2>3 Tier Deployment <em>(tested with Ubuntu)</em></h2>
+<ul>
+<li><a href="./3tier/3tier.html">Lab: 3 Tier Application Deployment</a>
+</li>
+</ul>
+
+<hr>
+<h2>Ansible <em>(Will work with RHEL 7, Lab written for Ubuntu)</em></h2>
+<ul>
+<li><a href="./Ansible/AnsibleKeyTerms.pdf" target="blank">Ansible Key Terms</a>
+</li>
+<li><a href="./Ansible/Ansible.html">Lab: Ansible</a> </li>
+</ul>
+
+<hr>
+<h2>GIT (tested with Ubuntu)</h2>
+<ul>
+<li><a href="./git/git.html">Lab: Git (Version control)</a>
+</li>
+</ul>
+
+<hr>
+<h2>3 Tier Deployment to Windows</h2>
+<ul>
+<li> <a href="./3tierA/3tierA.html">Lab: 3 Tier Deployment to Windows</a> </li>
+</ul>
+
+<hr>
+<h2>Victory Lap Bonus (All work with Admin VMs supplied)</h2>
+<p class="description">
+A wise friend of mine once said, "You don't realize how much you've learned until you tutor a first semester student."  This is my attempt to give you an experience like that.  I bet a lab you found challenging in third semester is not so tough now.
+</p>
+<p class="description">
+The Unix Admin course has been updated to use RHEL 8, so they are not identical to the ones you've done.
+</p>
+<ul>
+<li>Complete <strong>one</strong> of these labs from Unix Admin to earn up to 5 bonus points.
+	<ul>
+	<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/comp-10018/content/NFS/graded_lab_nfs.html">Graded Lab: NFS</a> </li>
+<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/comp-10018/content/Routing/graded_lab_routing.html">Graded Lab: Routing</a> </li>
+<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/comp-10018/content/DNS/graded_lab_dns.html">Graded Lab: DNS</a> </li>
+<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/comp-10018/content/Logging/graded_lab_logging.html">Graded Lab: Logging</a> </li>
+	</ul>
+</li>
+
+<li>Course content: <a href="https://csunix.mohawkcollege.ca/~long/courses/comp-10018/content">COMP-10018: Unix Admin</a> </li>
+</li>
+<li>Course VM: <a href="https://mohawkcollege365-my.sharepoint.com/:u:/g/personal/000235618_mohawkcollege_ca/ERxas4c_V0FAjojZXA0awAcBsZEoH6NfbKr-M-8MCKpBUg">comp-10018-vlab1b.ova</a> <em>(md5sum: f0f46f7cfbb78426b2a638a56722279d)</em>
+ </li>
+</ul>
+
+<hr>
+<h2>Real World Problem: YUM (Works with supplied RHEL 8 VM)</h2>
+<p class="description">
+Here is your chance to work on a 'real' problem encountered by one of your instructors.
+</p>
+<ul>
+<li> <a href="./RealWorld/yum/yum.html">Bonus Lab: YUM</a> </li>
+</ul>
+
+</body>
+</html>

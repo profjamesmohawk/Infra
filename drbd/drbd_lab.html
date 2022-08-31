@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: Intro To DRBD	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Intro To DRBD</h1>
+<h2>Introduction</h2>
+<p class="description">DRBD is software based data replication solution that is commonly used to build small high availability clusters. In the next lab we will build such a cluster. Today we will concentrate just on DRBD.</p>
+<p class="description">
+<strong>Recommended O/S:</strong>Ubuntu 20.4 LTS <em>(d01 VM is a good place to start)</em>
+</p>
+<hr />
+<h2>Part A: Orientation</h2>
+<p class="description">The DRBD Users Guide, from LINBIT, is an example of an excellently written manual.</p>
+<ol>
+<li>Read the <a target="blank" href="http://docs.linbit.com/">User's Guide for version 9.0</a> </li>
+</ol>
+<hr />
+<h2>Part B: Build a DRBD configuration</h2>
+<p class="description">Now that you know what DRBD is, it's time to consolidate your knowledge by building a simple test deployment.</p>
+<h3>Start with this lab configuration:</h3>
+<p><img src="drbd.png" alt="Lab Diagram" /></p>
+<ol>
+<li>Use the red network for DRBD replication traffic</li>
+<li>Use one disk on each node for the O/S and one for DRBD</li>
+<li>Create two replicated volumes, each 4 GB in size</li>
+<li>Mount the DRBD volumes at /ha/data1 and /ha/data2</li>
+</ol>
+<p><strong>Notes:</strong></p>
+<ol>
+<li>Follow the LINBIT users guide you reviewed in Part A.&nbsp; Pay particular attention to parts 3, 4 &amp; 6.</li>
+<li>The d01 Ubuntu course appliance is a good starting point for luke and yoda.  </li>
+<li>To install on Ubuntu: <span class=cmd>apt install drbd-utils</span> </li>
+<li>Many <span class=cmd>drbdadm</span> commands will fail if not run by root.  But won't say that's way :( </li>
+<li>To save typing <span class=cmd>sudo</span> repeatedly, try <span class=cmd>sudo -i</span>
+</li>
+
+</ol>
+<hr />
+<h2>Part C: Test</h2>
+<p class="description">Let's see DRBD to it's thing.</p>
+<ol>
+<li>To test what happens if the communication link is severed, "unplug" one of the nodes from the red network.
+<ol>
+<li>What was reported on each node?</li>
+<li>Does the primary still function?</li>
+<li>What happens when the link is restored?</li>
+</ol>
+</li>
+<li>To simulate a node crash of the secondary, power off the secondary node
+<ol>
+<li>What happened?</li>
+<li>How did you recover?</li>
+</ol>
+</li>
+<li>To simulate a node crash of the primary, power off the primary node
+<ol>
+<li>What happened?</li>
+<li>How did you recover?</li>
+</ol>
+</li>
+<li><strong>optional advance:</strong> We can simulate a disk failure by removing the disk from the kernel's device table.
+<pre class="code">
+# make note of the SCSI ID of our DRBD disk
+lsscsi
+
+# use the address we just found to remove the device from the kernel (this change does not survive a reboot)
+# NOTE: double check the address
+echo 1 > /sys/bus/scsi/devices/3\:0\:0\:0/delete
+</pre>
+</li>
+</ol>
+<hr />
+<h2>Part D: Better Tests</h2>
+<p class="description">The tests we performed in Part C would be much more meaningful if the system was reading and writing from the DRBD volumes. Let's redo those tests, but with some activity on the systems.</p>
+<ol>
+<li>Write a script or program that will create,read, and write files, 'as fast as it can' (or ask your instructor for such a script - see grading for details)</li>
+<li>Re-run the tests from Part C with your script running.</li>
+</ol>
+<hr />
+<h2>Part E: Grading</h2>
+<p class="description">This lab is worth a total of 10 points. Grades will be awarded as follows:</p>
+<ul>
+<li>Demonstrate your working configuration to your instructor (10 points)</li>
+<li>This demonstration may take the form of: zoom, recorded video, or the execution of a <a href="./host_info_drbd.sh">grading script.</a>
+<em> (grading script to be run on luke with both volumes up and mounted) </em>
+</li>
+</ul>
+</body>
+</html>

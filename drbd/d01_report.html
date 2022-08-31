@@ -1,0 +1,101 @@
+<html>
+<head>
+<style type="text/css">
+table { margin: 1em; border-collapse: collapse; }
+td, th { padding: .3em; border: 2px #ccc solid; }
+</style>
+</head>
+<body><table>
+<h2> DRBD Host Info Report </h2>
+<tr>
+<td valign="top"> Hostname </td>
+<td><pre>
+ 
+d01
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> Look at the config files </td>
+<td><pre>
+ 
+/etc/drbd.d/global_common.conf
+global {
+  usage-count yes;
+}
+common {
+  net {
+    protocol C;
+  }
+}
+<hr>
+/etc/drbd.d/r0.res
+resource r0 {
+  on d01 {
+    device    /dev/drbd1;
+    disk      /dev/sdb;
+    address   10.1.1.10:7789;
+    meta-disk internal;
+  }
+  on d02 {
+    device    /dev/drbd1;
+    disk      /dev/sdb;
+    address   10.1.1.20:7789;
+    meta-disk internal;
+  }
+}
+<hr>
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> drbdadm status </td>
+<td><pre>
+ 
+r0 role:Secondary
+  disk:UpToDate
+  peer role:Secondary
+    replication:Established peer-disk:UpToDate
+
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> /proc/drbd </td>
+<td><pre>
+ 
+version: 8.4.11-1 (api:1/proto:86-101)
+GIT-hash: 66145a308421e9c124ec391a7848ac20203bb03c build by mockbuild@, 2020-04-05 02:58:18
+
+ 1: cs:Connected ro:Secondary/Secondary ds:UpToDate/UpToDate C r-----
+    ns:0 nr:0 dw:0 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> firewall config </td>
+<td><pre>
+ 
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s3 enp0s8
+  sources: 
+  services: dhcpv6-client ssh
+  ports: 7789/tcp
+  protocols: 
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+	
+ 
+</pre>
+</td>
+</tr>
+</table></body></html>

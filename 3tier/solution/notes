@@ -1,0 +1,8 @@
+1) selinux _may_ prevent haproxy from opening socket - it did prevent apache from doing so in proxy mode
+2) mysql controls remote users, you need to run a grant command
+
+Fall 2020
+
+1) base install: https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-centos-7
+
+2) selinux will not allow httpd to open port out

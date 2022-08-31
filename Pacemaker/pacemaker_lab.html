@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: HA Clusters	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<a href="https://clusterlabs.org/quickstart-ubuntu.html">cluster labs: quick start ubuntu</a>
+<h1>Lab: HA Clusters</h1>
+<h2>Introduction</h2>
+<p class="description">Today we will explore the creation of a 'classic' HA cluster. HA clusters are an important part of enterprise infrastructure, especially for protecting key applications like databases.</p>
+<hr />
+<h2>Part A: Provision the lab systems</h2>
+<p><br /><br /><img src="pacemaker_lab.png" alt="Lab systems" /></p>
+<hr />
+<h2>Part B: Build a Pacemaker cluster: </h2>
+<p class="description">Follow the excellent <a target="blank" href="https://clusterlabs.org/pacemaker/doc/2.1/Clusters_from_Scratch/html/index.html">Clusters from Scratch</a> tutorial from Cluster Labs to build an HA web server.</p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>A VirtualBox appliance is supplied with CentOS 8 Stream installed <a href="https://mohawkcollege365-my.sharepoint.com/:u:/g/personal/000235618_mohawkcollege_ca/ET-0k5Qg8qxNleO1O0LgX4kBNlicVXVYtdahQNnPlfFmCw?e=8afDqC">centos_8_master.ova</a> <em>(md5: a1685b451f96dbfaccfadb613817f908)  (root pw is adminpass)</em> </li>
+<li>Complete the tutorial, starting with <em>Section 2.2</em>, and going up to the end of <em>Section 8: Replicate Storage using DRBD</em></li>
+<li>Use the host names and IP addresses from the diagram in place of those mentioned in the tutorial.  </li>
+<li>Use <span class=cmd>10.1.1.130</span> for your floating ip address.  </li>
+<li>You may need to re-boot your systems after installing drbd (don't forget to start the cluster after the re-boot) </li>
+<li>In step 8.2 the tutorial creates an LVM volume to use as the backing disk for DRBD, I suggest using a partition on sdb.  </li>
+</ul>
+
+<hr>
+<h2>Part C: Grading</h2>
+<ul>
+<li>Demonstrate your working cluster to your professor to earn your points.</li>
+<li>Your demonstration my take the form of a short video showing:
+	<ul>
+	<li>psc cluster status </li>
+	<li>fail-over the website to the standby node </li>
+	<li>pcs cluster status to show the website on the standby </li>
+	</ul>
+</li>
+</ul>
+
+<hr />
+<h2>Part Z: Word of warning</h2>
+<p class="description">Completing this lab has not qualified you to build a cluster for a production environment. If you want to do so, you'll need more practice and some quality time with the manuals. It is not uncommon for a 'cluster' to have more outages than a single system as a result of configuration errors and operational errors.</p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: jbl/php
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8081:80"
+    networks:
+      - votenet
+
+  db:
+    # replace username/repo:tag with your name and image details
+    # !!! ??? tie DB to ONE node, because storage is in image
+    #
+    image: jamesblong/dbt
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    networks:
+      - votenet
+networks:
+  votenet:

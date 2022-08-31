@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		swarm quick start	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Docker swarm - quick start</h1>
+<h2>Introduction</h2>
+
+<p class="description">For our work we do not need Docker Compose or DockerHost. Here's how to get a little swarm running quickly</p>
+<hr />
+<h2>Part A: Build the 'lab'</h2>
+<p class="description">Build the hosts like this...</p>
+<p><img src="docker_lab.png" alt="lab picture" /></p>
+<ul>
+<li>Set IP addresses and hosts names</li>
+<li>Update <em>/etc/hosts</em> on each node</li>
+<li>Configure your VM host's 'host only' virtual NIC to have an addr of 10.1.1.1/24 </li>
+</ul>
+<hr />
+<h2>Part B: Start a swarm on d1</h2>
+<p class="description">
+A swarm often contains more than one node.  But, we can turn up a single node swarm to test our applications.  Developers often run a configuration like this and then deploy to a more robust environment like K8s (a.k.a. Kubernetes)
+</p>
+<ol>
+<li>Start a swarm on d1
+<pre class="code">docker swarm init
+</pre>
+<em><strong>Ooops, that did not go as planned, we need to tell docker what interface to advertise on</strong></em></li>
+<li>Try <span class="cmd">docker swarm init</span> again but with the <span class="cmd"> --advertise-addr </span> option
+<pre class="code">docker swarm init --advertise-addr=10.1.1.101
+</pre>
+</li>
+</ol>
+<p><strong><em>Congratulations - you now have a one node swarm </em></strong></p>
+<hr />
+<h2>Part C: Test our swarm</h2>
+<p class="description">
+Docker composer YML is used to describe a complete deployment of one or more containers.  Let's see this in action with a trivial single container web server application.
+</p>
+<ol>
+<li>Build a trivial yml file to define a service. Create <strong>foo.yml</strong> that looks like this...
+<pre class="code">version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: httpd
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8080:80"
+    networks:
+      - webnet
+networks:
+  webnet:
+</pre>
+</li>
+<li>Deploy your service
+<pre class="code">docker stack deploy -c foo.yml foo
+</pre>
+</li>
+<li>Check that our service is running
+<pre class="code">docker stack list
+</pre>
+<pre class="code">docker stack ps foo
+</pre>
+</li>
+<li>View the containers running locally
+<pre class="code">
+docker ps
+</pre>
+</li>
+<li>Test the application
+<pre class="code">
+curl http://localhost:8080
+</pre>
+</li>
+<li>Stop our stack
+<pre class="code">
+docker stack rm foo
+</pre>
+</li>
+<li>Does the application still work?
+<pre class="code">
+curl http://localhost:8080
+</pre>
+</li>
+<li>Stop our application
+<pre class="code">
+docker stack rm foo
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part D: Container to container communication</h2>
+<p class="description">
+It is often necessary for one container within a swarm to make TCP/UDP connections to another container.  Containers on a Docker network can communicate.  Let's see how by adding a trivial container called fidgetspinner.  The fidgetspinner container simply sits idle for 1 hour then exits.  
+</p>
+
+<ol>
+<li>Add a second container to our stack, making foo.yml look like this
+<pre class="code">
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: httpd
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8080:80"
+    networks:
+      - webnet
+  fidgetspinner:
+    image: jameslongmohawk/fidgetspinner
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+networks:
+  webnet:
+</pre>
+</li>
+<li>Deploy your service
+<pre class="code">docker stack deploy -c foo.yml foo
+</pre>
+<li>Open a shell on the fidgetspinner container <em>(Use <span class=cmd>docker ps</span> to find fidgetspinner's container ID)</em>
+<pre class="code">
+docker exec -it &lt;CONTAINER ID&gt; sh
+</pre>
+</li>
+<li>Take advantage of the virtual name server that Docker provisions for each container in a stack
+<pre class="code">
+ping -c 3 web
+</pre>
+</li>
+<li>Prove to ourselves that we really are resolving to our <strong>web</strong> container
+<pre class="code">
+curl http://web:80
+</pre>
+</li>
+<li>Ooops!  We don't have <span class=cmd>curl</span> in the fidgetspinner container, let's try wget
+<pre class="code">
+wget http://web:80
+cat index.html
+</pre>
+<em>That's better !</em>
+</li>
+<li>Exit our shell on fidgetspinner
+<pre class="code">
+exit
+</pre>
+<em>or, if you want to be a cool admin...</em>
+<pre class="code">
+&lt;ctl&gt;-D
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part E: Put away our toys</h2>
+<p class="description">
+We are all done with our test stack.  We should be good citizens and tear it down.
+</p>
+<ol>
+<li> Remove the stack from the swarm
+<pre class="code">
+docker stack rm foo
+</pre>
+</li>
+</ol>
+
+</ol>

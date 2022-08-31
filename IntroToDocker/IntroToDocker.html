@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: Intro To Docker	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Intro To Docker</h1>
+<h2>Introduction</h2>
+<p class="description">Hopefully the reading assignment has peaked your curiosity about Docker. Now's your chance to get a bit of an understanding of how Docker works. This introduction should give you the basic skills you need to start designing and building Docker environments to satisfy the requirements of the projects to follow. It will not cover everything you need to know, there will be more research and experimentation required.</p>
+<p>Today you will:</p>
+<ul>
+<li>Use Docker CE on Ubuntu</li>
+<li>Run some pre-built images</li>
+<li>Build your own image</li>
+<li>Publish your image to the public Docker repository</li>
+</ul>
+<p>Upon completion you should:</p>
+<ul>
+<li>Know the difference between and image and a container</li>
+<li>Know how to run containers</li>
+<li>Know how to publish containers</li>
+<li>Have some questions like:
+<ul>
+<li>How do I manage network connections?</li>
+<li>How do I manage persistent storage?</li>
+<li>What's a swarm, and how do I build one?</li>
+<li>What would be some good scenarios in which to use Docker?</li>
+<li>How do I mange user accounts within a container?</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>Part A: Build a Docker host</h2>
+<p class="description">
+We are going to use Docker CE on Ubuntu.  A VirtualBox appliance is provided for your convenience.
+</p>
+<p><img src="docker_lab.png" alt="docker lab" /></p>
+<ul>
+<li>Import the VM from this appliance: <strong>d01_(10.1.1.101).ova</strong> found on Canvas.</li>
+<ul>
+<li>use the account: <strong>alice</strong> with the password <strong>userpass</strong> </li>
+</ul>
+</ul>
+<p><em><strong>You may find the <a href="../DistroDecoder/DistroDecoder.html">Distro Decoder</a></strong> helpful</em></p>
+
+<hr />
+<h2>Part B: Running your first container</h2>
+<ul>
+<p class="description">Walk through this guide: <a target="blank" href="https://github.com/docker/labs/blob/master/beginner/chapters/alpine.md">1.0 Running your first container</a></p>
+</ul>
+<hr />
+<h2>Part C: Running web apps</h2>
+<ul>
+<p class="description">Walk through this guide: <a target="blank" href="https://github.com/docker/labs/blob/master/beginner/chapters/webapps.md">2.0 WebApps with Docker</a> <br>(note: the image files used in this demo are not available, the application will work but you won't see the nice cat pictures.)</p>
+</ul>
+<hr />
+<h2>Part D: Apply your knowledge</h2>
+<p class="description">Now that you know the basics of Docker and containers, it is time to apply what you have learned. You will build and publish a static web site container with custom content.</p>
+<ol>
+<li>Use this image as a base: <a href="https://store.docker.com/images/httpd" target="blank">Docker httpd image</a></li>
+<li>Write a Dockerfile to reference the base image, copy in your content, and declare what ports should be exposed. <em>This will be a short file</em></li>
+<li>Your site must contain:
+<ul>
+<li>A default home page, stating your name and student number</li>
+<li>Your home page must have at least one link to an other page hosted by your container</li>
+</ul>
+</li>
+<li>Publish(<em>push</em>) your image to the public docker registry
+<ul>
+<li>you will need to create an account</li>
+<li>name your image YOUR_USERNAME/lab1_apache</li>
+<li>make sure the image is public</li>
+<li>have a classmate, try pulling and running your image</li>
+<li><strong>Grading:</strong> Submit your Dockerfile to the eLearn dropbox for this lab. Place the name of your image, in the comments section, so your instructor can pull it.&nbsp; Make sure your Dockerfile includes a statement of authorship.</li>
+</ul>
+</li>
+</ol>
+</body>
+</html>
