@@ -27,7 +27,14 @@
 <h2>Part A: Orientation</h2>
 <p class="description">The DRBD Users Guide, from LINBIT, is an example of an excellently written manual.</p>
 <ol>
-<li>Read the <a target="blank" href="http://docs.linbit.com/">User's Guide for version 9.0</a> </li>
+<li>Read the <a  href="./User_Guide_DRBD_9.pdf">User's Guide for version 9.0</a> </li>
+<li>Install DRBD from Launchpad
+<pre class="code">
+add-apt-repository ppa:linbit/linbit-drbd9-stack
+apt update
+apt install drbd-utils drbd-dkms
+</pre>
+</li>
 </ol>
 <hr />
 <h2>Part B: Build a DRBD configuration</h2>
@@ -42,7 +49,7 @@
 </ol>
 <p><strong>Notes:</strong></p>
 <ol>
-<li>Follow the LINBIT users guide you reviewed in Part A.&nbsp; Pay particular attention to parts 3, 4 &amp; 6.</li>
+<li>Follow the LINBIT users guide you reviewed in Part A.&nbsp; Pay particular attention to parts  4 &amp; 6.</li>
 <li>The d01 Ubuntu course appliance is a good starting point for luke and yoda.  </li>
 <li>To install on Ubuntu: <span class=cmd>apt install drbd-utils</span> </li>
 <li>Many <span class=cmd>drbdadm</span> commands will fail if not run by root.  But won't say that's way :( </li>
