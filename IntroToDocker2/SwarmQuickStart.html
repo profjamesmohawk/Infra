@@ -138,7 +138,7 @@ services:
       resources:
         limits:
           cpus: "0.1"
-          memory: 50M
+          memory: 50M # increase for MariaDB
       restart_policy:
         condition: on-failure
     networks:
