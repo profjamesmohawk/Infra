@@ -11,12 +11,21 @@ font-size: 1em;
 margin-left: 10px;}
 
 li {
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
+	margin-top: 10px;
 	line-height: 120%;
+}
+
+hr {
+	height: 1px;
+	border-width: 0;
+	color: grey;
+	background-color: grey;
 }
 
 h2{
 	margin-bottom: 0; padding-bottom: 0;
+	margin-top: 30px;
 }
 
 h3{
@@ -29,6 +38,15 @@ code{
 	font-size: 120%;
 }
 
+.mt10{
+	margin-top: 10px;
+}
+.mla{
+	margin-left: 20px;	
+}
+.ml40{
+	margin-left: 40px;	
+}
 .cmd{
 	font-family:monospace;
 	font-weight:bold;
@@ -50,14 +68,14 @@ code{
    border: 1px solid #ccc;
    padding: 3px;
    background: #ece9d8; 
-   /*color: DarkBlue; */
-   margin-bottom: 20px;
+   margin-bottom: 15px;
    margin-top: 0px;
    margin-left: 5px;
 }
 
 p.description{
 	margin-top: 5px;
+	margin-left: 10px;
 	line-height: 150%;
 }
 
@@ -89,13 +107,3 @@ td, th { padding: .3em; border: 2px #ccc solid; }
 	width: 95%;
 }
 
-.fifi{
-	margin-left: 15px;
-	width: 95%;
-/*
-	background: #F0F0F0 ;
-*/
-
-
-
-}

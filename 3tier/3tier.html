@@ -17,100 +17,153 @@
 </head>
 
 <body>
-<h1>Lab: 3 Tier Deployment </h1>
+<h1>Lab: Application Deployment (3 Tier) </h1>
 
 <h2>Introduction</h2>
 <p class="description">
-It is common to deploy applications in 3 tiers: presentation, application, and DB.  For this exercise presentation will be handled by the browser, application by PHP, and the DB by Mysql.
+It is common to deploy applications in 3 tiers: presentation, application, and DB.  For this exercise presentation will be handled by the browser, application by PHP, and the DB by MariDB.
 </p>
 <p class="description">
-We will deploy the trivial reservation system (trs), the one we use to book our lab systems, for this test.  The code is quiet ugly, but it will do for our purposes. <em>Do not use it as a PHP sample</em>
+We will deploy a simple sample application.  The application is called trs and is a trivial reservations system used to book meetings with professors.
 </p>
+
 <h3>Here is what we will build today</h3>
 <p> <IMG src="./3tier.png" alt=""> </p>
 
 <hr>
-<h2>Grading: </h2>
+<h2>Part A: Server builds</h2>
 <p class="description">
-You will demonstrate your work to your instructor and earn up to 10 points.
+Configure the base OS on the servers.
 </p>
-<p class="description">
-But wait, there's more!  The lab configuration described will not allow any of your production servers to contact the internet to install packages.  The student who comes up with the best/most elegant/most interesting solution to this problem will earn <strong>2 bonus marks</strong>.  To earn your bonus marks submit a <em>short</em> description of your solution to the Canvas dropbox.  Include a reason why your solution is better than simply adding a NAT interface to each node.  
-</p>
-
-<hr>
-<h2>Part A: Install everything on a single server </h2>
-<p class="description">
-Before we spread the application across 4 servers we should be confident that we can make it work on a single server.  
-</p>
-<ul>
-<li>Select any server you like, the course Ubunt VM is recommended, but use any OS you like. <br><em>(most of these tools are even available on Window$ for those of you who like that sort of thing.)</em>  </li>
-<li>Get the application and data base script from GitHub (select <em>Download Zip</em>) <a href="https://github.com/profjamesmohawk/trs">https://github.com/profjamesmohawk/trs</a> </li>
-<li>Install httpd and mysql/mariadb on your server <em>(for CentOS 7: mariadb mariadb-server php) (for Ubuntu: mariadb-client mariadb-server apache2 php libapache2-mod-php php-mysqli)</em>
-</li>
-<li>Run the <span class=cmd>build_trs_db.sql</span> script to create and populate the database.  </li>
-<li>Install the php code found in <span class=cmd>trs</span> in <span class=cmd>/var/www/html/trs</span> </li>
-<li>Test the app by going to &lt;your_server&gt;/trs/trs.php 
 <ol>
-<li>You should be able to log in as alice or bob (look in the sql to find their passwords) </li>
-<li>If you can't login, look at the httpd error log, you may need to run <span class=cmd>yum install</span> one more time <em>(hint: yum list | grep -i php)</em></li>
-</ol>
+
+<li>db01:
+<ul>
+<li>clone from bookworm_min VM 
+<ul>
+<li>OS: Debian 12 </li>
+<li>Users: root(adminpass) alice(userpass)
 </li>
 </ul>
+</li>
+<li>set IP address: 10.1.1.200 </li>
+<li>set hostname: db01 </li>
+<li>install MariaDB packages: mariadb-server</li>
+</ul>
 
-<hr>
-<h2>Part B: Split the Deployment </h2>
-<p class="description">
-Now that we have the application working, it's time to start spreading the work load out. First we will split the web server and DB work.
-</p>
-<ol>
-
-<li>Install the data base on db01 </li>
-<li>Install the PHP application on w01 and w02 </li>
-<li>Test your work by accessing the trs application on both w01 and w02 </li>
+<li>web01:
+<ul>
+<li>clone from bookworm_min VM </li>
+<li>set IP address: 10.1.1.201 </li>
+<li>set hostname: web01 </li>
+<li>install packages for php: apache2, php, libapache2-mod-php, php-mysql</li>
+<li>install MariaDB client: mariadb-client</li>
+</ul>
+</li>
 </ol>
 
-	Hints:
-	<ul>
-	<li>You will need to modify <span class=cmd>config.php</span> </li>
-	<li>You will need to allow remote DB access through the firewall (ufw/firewalld) </li>
-	<li>mysql treats remote users with caution, you may need to run something like...
-<pre class="code">
-GRANT ALL PRIVILEGES ON *.* TO 'USERNAME'@'%' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION;
-</pre>
-	</li>
-	<li>RHEL only: selinux may prevent httpd from opening TCP connections.  This might help...
-<pre class="code">
-setsebool -P httpd_can_network_connect=1
-</pre>
-	</li>
-	<li>Ubuntu only: you will need to tell mariabd/mysql to listen on 10.2.1.40
-<pre class="code">
-grep bind-address /etc/mysql/*.conf.d/*
-</pre>
-	</li>
-	</ul>
 <hr>
-<h2>Part C: Load Balancing</h2>
+<h2>Part B: Build the Database</h2>
 <p class="description">
-We want w01 and w02 to share the work load of those keen users who want to access trs ;)
-</p>
-<p class="description">
-We will use haproxy as our load balancer.
+We will need to do a little DBA work as part of the install.
 </p>
 <ol>
+<li>Logon to db01 as root </li>
+<li>Tell MariDB to listen for network connections on all interfaces by editing <strong>/etc/mysql/mariadb.conf.d/50-server.cnf</strong>...
+<pre class="code">
+bind-address             = 0.0.0.0
+</pre>
+</li>
+<li>Verify that you can access Mariad by logging on and running a simply query.
+<ol type=a>
+<li>Use the mariadb shell to connect as root
+<pre class="code">
+mariadb
+</pre>
+</li>
+<li>You should now be in the MariDB command interpreter shell. Your promt should look something like...
+<pre class="code">
+MariaDB [(none)]&gt;
+</pre>
+</li>
+<li>Run a tiny query to show the current time
+<pre class="code">
+select NOW();
+</pre>
+</li>
+<li>Exit the MariDB shell
+<pre class="code">
+exit
+</pre>
+</li>
+</ol>
+</li>
+<li>Run the SQL supplied by the developers (these commands should run silently)
+<pre class="code">
+mariadb < build_trs_db.sql
+mariadb < add_users.sql
+mariadb < add_reservations.sql
+mariadb < create_mysql_trs_user.sql
+</pre>
+</li>
+<li>Check that the DB was built, by logging on as the newly created DB user trs_user.  Look in create_mysql_trs_user.sql to determine the password.
+<pre class="code">
+mysql -u trs_user -p
+</pre>
+</li>
+<li>List the application users:
+<pre class="code">
+SELECT * FROM trs.users;
+</pre>
+</li>
+<li>List the available meeting times users:
+<pre class="code">
+SELECT * FROM trs.reservations;
+</pre>
+</li>
+</ol>
+
+<hr>
+<h2>Part C: Configure web01 and install the trs php application</h2>
+<ol>
+<li>Verify that we can access the trs DB from db01
+<pre class="code">
+mariadb --host db01 --user trs_user -p
+</pre>
+</li>
+<li>Run an SQL query to list all the trs application users.  </li>
+<li>Copy all the trs PHP files to <strong>/var/www/html/trs</strong> </li>
+<li>Test our work with a browser. <em>http://10.1.1.201/trs/trs.php</em> </li>
+<br>
+<em>You will likely need to do a little trouble shooting now</em>
+</ol>
+
+
+<hr>
+<h2>Part D: Load Balancing</h2>
+<p class="description">
+In many cases we use horizontal scaling to increase capacity.  We can increase capacity by adding a web server and using a load balancer to spread the users across the web servers.
+We will use haproxy as our load balancer.
+</p>
+
+<p> <IMG src="./3tierbal.png" alt=""> </p>
+
+
+<ol>
+<li>Clone web02 from web01 </li>
+<li>Clone lb01 from bookworm_min </li>
 <li>Install haproxy on lb01 </li>
 <li>Confiugre haproxy to froward http requests to w01 and w02 by <strong>appending</strong> this fragment to <span class=cmd>/etc/haproxy/haproxy.cfg</span>
 <pre class="code">
 frontend http
-  bind 10.2.1.10:80
+  bind 10.1.1.203:80
   mode http
   default_backend web-backend
 
 backend web-backend
    balance roundrobin
-   server w01 10.2.1.20:80 check
-   server w02 10.2.1.21:80 check
+   server web01 10.1.1.201:80 check
+   server web02 10.1.1.202:80 check
 </pre>
 </li>
 </ol>
@@ -121,18 +174,28 @@ backend web-backend
 Test your handiwork from at least two browsers connecting to the bridged adapter on lb01.
 </p>
 <ul>
-<li> Pay attention to the <em>server=[w01|w02]</em>message on each page.  </li>
+<li> Pay attention to the <em>server=[web01|web02]</em>message on each page.  </li>
 <li>Do you stay on a server?  </li>
 <li>Log in and see how things go.  </li>
 </ul>
-<strong>If you think everything is fine, you are mistaken - talk to your instructor.</strong>
+<strong>If you think everything is fine, you are likely mistaken - talk to your instructor.</strong>
 
 <hr>
 <h2>Part E: Make it sticky</h2><p class="description">
 Tying a user to a specific back-end server for an entire 'session' is very important for web applications to run smoothly.
 </p>
-Here's a nicely written <a href="https://www.haproxy.com/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/" target="blank">article</a> describing sticky sessions.
+Here's a nicely written <a href="https://www.haproxy.com/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/" >article</a> describing sticky sessions.
 
+<hr>
+<h2>Part F: Grading</h2>
+<p class="description">
+Demonstrate your trs to your instructor.
+</p>
 
+<hr>
+<h2>Clean up</h2>
+<p class="description">
+You will need web01 and db01 for future labs.
+</p>
 </body>
 </html>

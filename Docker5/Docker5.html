@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>Docker 5</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Docker 5 - storage and systemd integration</h1>
+<p class="description">
+Today we will get the trs application ready for deployment.  We will move our database files out of the trsweb container then we will configure systemd to manage an instance of the trs application.
+</p>
+
+
+<hr>
+<h2>Part A: Storage </h2>
+<p class="description">
+We have stored all our data files, including the database, in our containers. 
+This is convenient for learning about Docker, but not indicated for deployment.
+For deployment persistent data should be stored outside the container: containers should be transient; COW file systems can perform poorly.
+</p>
+<ol>
+<li>Read the <a href="https://docs.docker.com/storage/">Storage section of the Docker Manual</a> </li>
+<li>Create a new compose file, <strong>trs_vol.yml</strong> in which the database files are stored on Docker volume 
+<ul>
+<li>The <a href="https://hub.docker.com/_/mariadb">Mariadb container documentation</a> might be helpful.  </li>
+<li>Use trs_varport.yml, from the last lab, as a template.
+</li>
+</ul>
+</li>
+</ol>
+
+<hr>
+<h2>Grading</h2>
+<p class="description">
+Submit your trs_vol.yml to earn up to 5 points.
+</p>
+
+</body>
+</html>

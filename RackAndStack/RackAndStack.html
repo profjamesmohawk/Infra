@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: Environment</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab Environment</h1>
+<p class="description">
+Students are responsible for provisioning and maintaining their own lab environments.  
+</p>
+
+<h2>Requirements</h2>
+
+<ol>
+<li>Hardware:
+<ul>
+<li>run a minimum of 4 Linux VMs concurrently </li>
+<li>store a minimum of 5 Linux VM images </li>
+</ul>
+</li>
+
+<li>Linux VM:
+<ul>
+<li>2 GB RAM </li>
+<li>1 VCPU (2 recommended) </li>
+<li>18 GB Virtual disk (average 3 GB physical disk used per VM) </li>
+<li>2 NIC
+<ul>
+<li>NAT 
+<ul> <li>required for installation of packages and container images </li>
+</ul>
+</li>
+<li>Host-only or Internal </li>
+<ul> <li>required for: ssh, http </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>O/S:
+<ul>
+<li>Debian 12, <em>bookwork</em>, is recommended </li>
+<li>Any modern Linux distro should work, if in doubt ask your instructor </li>
+</ul>
+</li>
+
+<li>Software:
+<ul>
+<li>Apache web server </li>
+<li>Mysql/Mariadb database server </li>
+<li>Docker </li>
+</ul>
+</li>
+</ol>
+
+<h2>Reference VM</h2>
+<p class="description">
+A <em>bookworm</em> appliance is supplied.  
+</p>
+
+<h2>Deployment Diagrams</h2>
+<br>
+<div class=ml40>
+<IMG src="./RackAndStack.png" alt="deployment block diagram">
+</div>
+</body>
+</html>

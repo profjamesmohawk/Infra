@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>Docker 2</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Docker 2</h1>
+<h2>Introduction</h2>
+<p class="description">Today we will move past running single containers on a single host, we will run groups of containers to form an application.</p>
+<hr />
+<h2>Part A: Build the 'lab'</h2>
+<p class="description">We will use the doc01 we created in the Introduction to Docker lab. If you did not save it, recreate it by completing Part A of the Introduction to Docker lab.</p>
+<p><img src="docker_lab.png" alt="lab picture" /></p>
+
+<hr>
+<h2>Part B: Complete the Getting Started guide</h2>
+<ol>
+<li><a target="blank" href="https://docs.docker.com/get-started/05_persisting_data/">Docker: Getting Started</a>
+ from where we left off.
+</li>
+<strong>WARNING:</strong> We are using version 1 of docker compose.  That means that we must use <span class=cmd>docker-compose</span> in place of the turorial's <span class=cmd>docker compose</span>
+</ol>
+<h3>Tips:</h3>
+<ul>
+<li>the tutorial assumes the web-browser is on the same host as the container(s).  </li>
+<li>curl can be useful when testing connections </li>
+<li>the tutorial uses YML files, which are picky about indentation, so it might be a good idea to switch from tabs to spaces in vi by running these commands in vi
+<pre class="code">
+:set tabstop=4
+:set expandtab
+</pre>
+<strong>or,</strong> adding these lines to ~/.vimrc
+<pre class="code">
+set tabstop=4
+set expandtab
+</pre>
+</li>
+</ul>
+
+<hr>
+<h2>Part C: Grading</h2>
+<ol>
+<li>Demonstrate your running multi-container application from Step 8 to your instructor.
+</li>
+</ol>
+
+<hr>
+<h2>Clean up:</h2>
+<p class="description">
+None of the changes you made to doc01 for this lab need to persist for future labs.
+</p>
+
+</body>
+</html>

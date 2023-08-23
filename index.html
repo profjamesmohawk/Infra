@@ -19,114 +19,86 @@
 
 <body>
 <h1>COMP-10097 Virtual Infrastructure </h1>
-<p class="description">
-Welcome.  COMP-10097 is a project based course in which we will explore the key technologies required to build and support large virtual environments.  
 <ul>
-<li> <a href="./Introduction/Lecture.pdf">Course Overview(pdf)</a>
-</li>
-<li>Like many modern admins, we will use more than one distro. This <a href="./DistroDecoder/DistroDecoder.html">DistroDecoder</a> might come in handy.
-<li> <a href="./Introduction/DistroDiagram.pdf">My attempt to show the lineage of RHEL and Ubuntu (pdf)</a> </li>
+<li> <a href="./Introduction/Lecture.pdf">Course Overview(pdf)</a> </li>
+<li> <a href="./Docs/Ref.html">Reference documentation</a>
 </li>
 </ul>
 </p>
 
 
 <hr>
-<h2>Introduction to Virtual Computing</h2>
-<p class="description">
-The best way to keep up to date is to read.  Today you will get a chance to read a selection of technical articles addressing the past, present, and future of virtualisation.
-</p>
-<ul> <li><a href="./Theory/Theory.html">Reading Assignment</a> </li>
+<div class=mla>
+<h2>Lab set up</h2>
+<ul>
+<li><a href="./RackAndStack/RackAndStack.html">Environment</a> </li>
+<li><a href="./RackAndStack/Debian.html">Lab: Debian survival guide</a>
+</li>
+</ul>
+<h2>Classic application deployment (3 Tier) </h2>
+<ul>
+<li><a href="./3tier/3tier.html">Lab: Application Deployment</a> </li>
+<li><a href="./3tier/3tier_bonus.html">Bonus Lab: White Hat</a> </li>
+<li><a href="https://wiki.debian.org/NetworkConfiguration#A3_ways_to_configure_the_network">Reference: Debian Network Config</a>
+<li><a href="https://www.debian.org/doc/manuals/debian-reference/ch02.en.html#_basic_package_management_operations">Reference: APT Package Manager</a> </li>
 </ul>
 
-<hr>
-<h2>Introduction to Docker</h2>
+<h2>Docker 1 - Introduction</h2>
 <ul>
-<li><a href="./IntroToDocker/IntroToDocker.html">Lab: Introduction to Docker</a> </li>
+<li><a href="./DockerIntro/DockerIntro.html">Lab: Introduction to Docker</a> </li>
 <li><a href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/">A peek under the hood</a> </li>
 </ul>
 
 
-<hr>
-<h2>Docker 2 </h2>
+<h2>Docker 2  - complete the <em>Get Started</em> guide</h2>
 <ul>
-<li><a href="./IntroToDocker2/IntroToDocker2.html">Lab: Introduction to Docker - Part 2</a> </li>
-<li><a href="./IntroToDocker2/IntroToDocker2_hints.html">HINTS!!!</a>
-</ul>
-
-<hr>
-<h2>DRBD </em></h2>
-<ul>
-<li><a href="./drbd/drbd_lab.html">Lab: DRBD</a>
+<li><a href="./Docker2/Docker2.html">Lab: Docker 2</a> </li>
+<li><a href="./Docker2/Slides_10097_Week02.pdf">Lecture slides</a>
 </li>
 </ul>
 
-<hr>
-<h2>HA Clusters <em>(Use CentOS 8 Stream )</em></h2>
+<h2>Docker 3 - composing applications </h2>
 <ul>
-<li> <a href="./Pacemaker/pacemaker_lab.html">Lab: HA Clusters with Pacemaker</a> </li>
-</ul>
-
-<hr>
-<h2>3 Tier Deployment </h2>
-<ul>
-<li><a href="./3tier/3tier.html">Lab: 3 Tier Application Deployment</a>
+<li><a href="./Docker3/Docker3.html">Lab: Docker 3</a> </li>
+<li>
+<a href="https://docs.docker.com/engine/reference/builder/">Reference: Dockerfile</a>
+</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/apache-web-server-dockerfile">Reference: Build an httpd container</a> <em>Warning: quotation marks look wrong, but it is still a good tutorial.</em>
 </li>
 </ul>
 
-<hr>
-<h2>Ansible </h2>
+<h2>Docker 4 - variables and secrets</h2>
 <ul>
-<li><a href="./Ansible/AnsibleKeyTerms.pdf" target="blank">Ansible Key Terms</a>
-</li>
-<li><a href="./Ansible/Ansible.html">Lab: Ansible</a> </li>
-</ul>
-
-<hr>
-<h2>GIT </h2>
-<ul>
-<li><a href="./git/git.html">Lab: Git (Version control)</a>
+<li><a href="./Docker4/Docker4.html">Lab: Docker 4</a>
 </li>
 </ul>
 
-<hr>
-<h2>3 Tier Deployment to Windows</h2>
+<h2>Docker 5 - storage </h2>
 <ul>
-<li> <a href="./3tierA/3tierA.html">Lab: 3 Tier Deployment to Windows</a> </li>
+<li><a href="./Docker5/Docker5.html">Lab: Docker 5</a> </li>
+</ul>
+
+<h2>Podman</h2>
+<ul>
+<li> coming soon </li>
+</ul>
+
+<h2>Orchestration</h2>
+<ul>
+<li> coming soon </li>
+</ul>
+
+<h2>Containers from scratch </h2>
+<ul>
+<li> coming soon </li>
 </ul>
 
 <hr>
 <h2>Victory Lap Bonus (All work with Admin VMs supplied)</h2>
-<p class="description">
-A wise friend of mine once said, "You don't realize how much you've learned until you tutor a first semester student."  This is my attempt to give you an experience like that.  I bet a lab you found challenging in third semester is not so tough now.
-</p>
-<p class="description">
-The Unix Admin course has been updated to use RHEL 8, so they may not be identical to the ones you've done.
-</p>
 <ul>
-<li>Complete <strong>one</strong> of these labs from Unix Admin to earn up to 5 bonus points.
-	<ul>
-	<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/LinAdmin/NFS/graded_lab_nfs.html">Graded Lab: NFS</a> </li>
-<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/LinAdmin/Routing/graded_lab_routing.html">Graded Lab: Routing</a> </li>
-<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/LinAdmin/DNS/graded_lab_dns.html">Graded Lab: DNS</a> </li>
-<li> <a href="https://csunix.mohawkcollege.ca/~long/courses/LinAdmin/Logging/graded_lab_logging.html">Graded Lab: Logging</a> </li>
-	</ul>
+<li><a href="./VictoryLap/VictoryLap.html">Lab: Victory Lap</a>
 </li>
-
-<li>Course content: <a href="https://csunix.mohawkcollege.ca/~long/courses/LinAdmin">COMP-10018: Linux Admin</a> </li>
-</li>
-<li>Course VM: posted to Canvas
- </li>
 </ul>
-
-<hr>
-<h2>Real World Problem: YUM (Works with supplied RHEL 8 VM)</h2>
-<p class="description">
-Here is your chance to work on a 'real' problem encountered by one of your instructors.
-</p>
-<ul>
-<li> <a href="./RealWorld/yum/yum.html">Bonus Lab: YUM</a> </li>
-</ul>
-
+</div>
 </body>
 </html>

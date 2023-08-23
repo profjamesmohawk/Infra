@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>Docker 4</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Docker 4 - variables and secrets</h1>
+<h2>Introduction</h2>
+<p class="description">
+Today we will tackle the problem of environment sprawl.  Historically an IT department might maintain 3 environments: development, test, and production.  Modern development methodologies, like DevOps, require many more environments.
+</p>
+
+<p class="description">
+We recently learned how to deploy a group of containers as an application using docker-compose.  In our example we deployed a complete working trs application.
+</p>
+
+
+<hr>
+<h2>Part A: Demonstrate variables in compose.yml</h2>
+<p class="description">
+We often wan to deploy many copies of an application. For example the prod and prod_test environments might differ only in the port they listen on.  Environment variables can be used to customize a compose file at run time.
+</p>
+<p class="description">
+We will use the httpd container from Docker Hub to demonstrate.
+</p>
+
+<ol>
+<li>Create a static compose file named ~/doc/comp/htttp_80.yml
+<pre class="code">
+services:
+    web:
+        image: httpd
+        ports:
+            - 80:80
+</pre>
+</li>
+<li>Run httpd
+<pre class="code">
+docker-compose  -p httpd_80 -f ./httpd_80.yml  up -d
+</pre>
+</li>
+<li>Test with curl
+<pre class="code">
+curl http://localhost:80
+</pre>
+</li>
+<li>Down the application
+<pre class="code">
+docker-compose  -p httpd_80 -f ./httpd_80.yml  down
+</pre>
+</li>
+<li>Create a parameterise compose file named ~/doc/comp/httpd_varport.yml
+<pre class="code">
+services:
+    web:
+        image: httpd
+        ports:
+            - ${HTTP_PORT}:80
+</pre>
+</li>
+<li>Run httpd with port 80 mapped to 8000
+<pre class="code">
+export HTTP_PORT=8000
+docker-compose  -p httpd_8000 -f ./httpd_varport.yml  up -d
+</pre>
+</li>
+<li>Test with curl </li>
+<li>Down the app </li>
+</ol>
+
+<hr>
+<h2>Part B: Launch apps from a script</h2>
+<ol>
+<li>Use this script, <a href="./compose-mgr.sh">compose-mgr.sh</a>, to manage a set of projects <em>(a.k.a. running apps)</em>
+<pre class="code">
+./compos-mgr.sh -f ./httpd_varport.yml -n 2 up
+</pre>
+</li>
+<li>You should now have two instances of the httpd_varport project.  Have a look with
+<pre class="code">
+docker ps
+</pre>
+</li>
+<li>Down all the projects
+<pre class="code">
+./compose-mgr.sh -f ./httpd_varport.yml -n 2 down
+</pre>
+</li>
+</ol>
+
+<hr>
+<h2> Part C: Launch 5 instances of the trs project </h2>
+<p class="descriptio">
+The testing team has requested 5 instances of the trs project.
+</p>
+<p class="description">
+Each instance must be independent - reservations made in one instance must not appear in an other.
+</p>
+
+<ol>
+<li>Create a compose file named ~/doc/comp/trs_varport.yml
+<ol class=mt10 type=a>
+<li>Start with
+<pre class="code">
+services:
+    web:
+        image: trsweb
+        ports:
+            - 80:80
+    db:
+        image: trsdb
+        environment:
+            MYSQL_ROOT_PASSWORD: beer
+</pre>
+</li>
+<li>Modify trs_varport.yml so that the listen port is set from the environment variable HTTP_PORT </li>
+</ol>
+</li>
+<li>Bring up 5 instances of the trs project with compose-mgr.sh </li>
+<li>Test our work with a browser.  Each port, 800[1-4], should present an independent trs instance.  </li>
+<li>Bring down our 5 instances with compose-mgr.sh </li>
+
+</ol>
+
+<hr>
+<h2>Part D: Variable Interpolation </h2>
+<p class="description">
+If HTTP_PORT is not set, our new trs_varport.yml compose file won't run.  A solution can be found in
+ the <a href="https://docs.docker.com/compose/compose-file/12-interpolation/">Docker Reference: Interpolation</a> </li>
+</p>
+
+<ol>
+<li>Demonstrate the error
+<pre class="code">
+unset HTTP_PORT
+docker-compose  -p default_port -f ./trs_varport.yml  up -d
+</pre>
+</li>
+
+<li>Modify httpd_varport.yml so that the port defaults to 80 when HTTP_PORT is not set.  </li>
+<li>We should no longer get an error from
+<pre class="code">
+unset HTTP_PORT
+docker-compose  -p default_port -f ./trs_varport.yml  up -d
+</pre>
+</li>
+</ol>
+
+<hr>
+<h2>Part E: Docker Secrets</h2>
+<p class="description">
+Keeping sensitive data, like passwords, in a compose file can be a security risk, particularly when sharing with a 3rd party.  
+Docker Secrets address this problem
+</p>
+<ul>
+<li>Read <a href="https://docs.docker.com/compose/use-secrets/">Using Secrets in Compose from the Manual</a> </li>
+<li>Move the MariaDB root password, beer, to a secret </li>
+<li>Move trs/config.php to a secret </li>
+</ul>
+
+<hr>
+<h2>Part F: Grading</h2>
+<ul>
+<li><em>Core (10 points):</em> Submit your trs_varport.yml file and any supporting files required by the secret.  </li>
+<li><em>Contrib (5 points):</em> Submit a modified version of <a href="./compose-mgr.sh">compose-mgr.sh</a> that:
+
+<ol class=mt10>
+<li>Takes a command line option -p that allows the caller to set the BASE_PORT value </li>
+<li>If -p is not set, BASE_PORT defaults to 8001 </li>
+<li>The Usage statement looks like this
+<pre class="code">
+usage: $0 -f FILE -n N -p PORT up|down
+</pre>
+</li>
+</ol>
+
+</li>
+</ul>
+<span class=cmd></span>
+
+</body>
+</html>

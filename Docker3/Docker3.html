@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>Docker 3</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Docker 3</h1>
+<h2>Introduction</h2>
+<p class="description">Today we will deploy the trs application with Docker </p>
+
+
+<hr>
+<h2>Part A: Build the DB container image</h2>
+<ol>
+	<li>Use the <a href="https://hub.docker.com/_/mariadb/" target="blank">mariadb</a> container from the Docker public registry.
+	<ul>
+		<li>Read the documentation for the mariadb container.</li>
+		<li>Pay careful attention to the bits about: <strong>MYSQL_ROOT_PASSWORD</strong> and <strong>/docker-entrypoint-initdb.d</strong></li>
+	</ul>
+	</li>
+	<li>Name your image <strong>&lt;YOUR_DOCKER_ID&gt;/trsdb</strong></li>
+	<li>Store your DB files in the container - so your instructor can download and run a working app </li>
+	<li>Use the trs SQL to build the database </li>
+
+<li>Test the DB container
+	<ol type="a">
+	<li>Run the <strong>trsdb</strong> image in a container named <strong>trsdb1</strong></li>
+	<li>Connect the container we just ran.
+<pre class="code">
+docker exec -it trsdb1 bash
+</pre>
+
+
+<li>Connect to the DB
+<pre class="code">
+maridb --user=root --password=&lt;ROOT_PASSWORD_YOU_SET&gt;
+</pre>
+</li>
+<li>Check our database
+<pre class="code">
+select * from trs.users;
+select * from trs.reservations;
+</pre>
+</li>
+</ol>
+</li>
+</ol>
+
+<hr>
+<h2>Part B: Build the web-server container</h2>
+<ol >
+
+
+<li>Name your image <strong>&lt;YOUR_DOCKER_ID&gt;/trsweb</strong></li>
+<li>Base your image on the public <strong>debian</strong> container</li>
+<li>Use a RUN command in your Dockerfile to install apt packages.  <em>Don't forget to run apt-get update first.</em> </li>
+<li>Tell Docker to run apache2 in foreground mode when the container starts. (This <a href="https://www.digitalocean.com/community/tutorials/apache-web-server-dockerfile">tutorial</a> should help.  Watch out for quotation marks.)   </li>
+</li>
+<li>Test the web server container
+<ol type="a">
+<li>Run your <strong>trsweb</strong> image as a container named <strong>trsweb1</strong></li>
+<pre class="code">
+docker run -it --rm -p 8080:80 &lt;YOUR_DOCKER_ID&gt;/trsweb
+</pre>
+<li>Connect to the container with a browser from your desktop <em>(you should see a database connection error because the db host can not be found)</em></li>
+<pre>
+http://10.1.1.204:8080/trs.php
+</pre>
+</ol>
+
+</ol>
+</ol>
+
+<hr>
+<h2>Part C: Testing the containers together</h2>
+<p class="description">
+We will use <a href="https://docs.docker.com/get-started/07_multi_container/">Part 7: Multi-container apps from the Get Started Guide</a> as a templateto: define a network; run a trsdb container; run a trsweb container.
+</p>
+<ol>
+<li>Create a network named <strong>trs-app</strong> </li>
+<li>Run a <strong>trsdb</strong> container.  
+<pre class="code">
+docker run \
+    --network trs-app \
+    --network-alias db \
+    -e MYSQL_ROOT_PASSWORD=beer \
+    trsdb
+</pre>
+</li>
+<li>Run a <strong>trsweb</strong> container.  
+<pre class="code">
+docker run \
+    --network trs-app \
+    --network-alias web \
+    -p 8080:80 \
+    trsweb
+</pre>
+</li>
+<li>Test our work from a browser.  The application should be fully functional.  </li>
+<li>Stop and remove the containers we just created.</li>
+</ol>
+
+<hr>
+<h2>Part D: Deploy with docker-compose</h2>
+<p class="description">
+We can use docker compose to capture all the settings we passed to the docker command in Part C.
+</p>
+<ol>
+<li>Use <a href="https://docs.docker.com/get-started/08_using_compose/">Part 8: Using Docker Compose from the Get Started guide</a> as a template to create a compose.yml file to manage your containers as a single unit.
+</li>
+</ol>
+<strong>Note: </strong>The version of the docker command installed on doc01 does not support the compose sub-command.  Compose functionality is provided by the docker-compose command.
+
+
+<hr>
+<h2>Part E: Grading</h2>
+<ol>
+<li>Push your images to the public Docker registry, make sure they are public so your instructor can pull them.</li>
+<li>Submit your <strong>compose.yml</strong> to the dropbox for this lab.</li>
+</ol>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		cgroups	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>cgroups</h1>
+
+<h2>Introduction</h2>
+<p class="description">
+The control group Linux kernel mechanism allows system resources to be allocated across groups of processes. 
+</p>
+<p class="description">
+Today we will configure cgroup at a low level to demonstrate its features and behaviour.  Then we will see how systemd uses cgroup and how to customize this behaviour.
+</p>
+<hr>
+<h2>Reference:</h2>
+<ul>
+<li> <a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html">cgroup documentation on kernel.org</a> </li>
+<li> <a href="https://wiki.archlinux.org/title/cgroups">cgroups documentation from achlinux</a>
+</li>
+<li> man systemd.resource-control </li>
+</ul>
+
+<hr>
+<h2>Part A: Setup our environment </h2>
+<ul>
+<li>VM provided </li>
+<li>Account(s)/pw(s) </li>
+</ul>
+
+<hr>
+<h2>Part B: Configure systemd to use cgroup v2 </h2>
+<ol>
+<li>Tell the system to use cgroup v2, by adding <span class=cmd>systemd.unified_cgroup_hierarchy=1</span> to GRUB_CMDLINE_LINUX in
+<span class=cmd>/etc/default/grub</span> so it looks like this
+<pre class="code">
+GRUB_CMDLINE_LINUX="resume=/dev/mapper/VG01-LV_swap rd.lvm.lv=VG01/LV_root rd.lvm.lv=VG01/LV_swap rd.lvm.lv=VG01/LV_usr systemd.unified_cgroup_hierarchy=1"
+
+</pre>
+</li>
+<li>Build the grub configuration file
+<pre class="code">
+grub2-mkconfig -o /boot/grub2/grub.cfg
+</pre>
+</li>
+<li>reboot
+<pre class="code">
+shutdown -r now
+</pre>
+</li>
+
+</ol>
+
+<hr>
+<h2>Manage via the file system</h2>
+<ol>
+</ol>
+
+
+<hr>
+<h2>Manage via systemd</h2>
+
+
+
+
+
+
+</body>
+</html>
