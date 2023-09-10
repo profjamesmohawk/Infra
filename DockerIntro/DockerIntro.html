@@ -56,26 +56,6 @@ apt update
 apt install docker.io docker-compose
 </pre>
 </li>
-<li>Tell the docker daemon to use g01 as a proxy, by telling systemd to set two environment variables before starting the daemon. 
-<br><strong>/etc/systemd/system/docker.service.d/http-proxy.conf</strong>
-<pre class="code">
-[Service]
-Environment="HTTP_PROXY=http://10.1.1.101:3128"
-Environment="HTTPS_PROXY=http://10.1.1.101:3128"
-</pre>
-</li>
-<li>Update the docker daemon's confiuration
-<ul>
-<li>Method A:
-<pre class="code">
-systemctl daemon-reload 
-systemctl restart docker.service
-</pre>
-</li>
-<li>Method B: reboot 
-</li>
-</ul>
-</li>
 <li>Check our work
 <pre class="code">
 docker run hello-world
@@ -86,10 +66,10 @@ docker run hello-world
 <hr />
 <h2>Part B: Getting Started</h2>
 <p class="description">
-Today we will complete the first four sections of Docker's excellent <em>Getting Started</em> guide.  We will complete the guide for our next lab.
+Today we will complete the first four sections of Docker's excellent <em>Get Started</em> guide.  We will complete the guide for our next lab.
 </p>
 <ul>
-<li>Complete the <strong>first 4</strong> sections of this guide: <a  href="https://docs.docker.com/get-started/">Getting Started Guide from Docker </a><</li>
+<li>Complete the <strong>first 4</strong> sections of this guide: <a  href="https://docs.docker.com/get-started/">Get Started Guide from Docker </a></li>
 <li>Once you have completed <em>Step 4 Share the application</em> move on to Part C of this lab </li>
 <li>
 Note: When mapping ports ports at run time with -p, listen on all interfaces not just loop-back. Use:
