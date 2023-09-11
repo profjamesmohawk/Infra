@@ -105,6 +105,15 @@ apt install build-essential dkms linux-headers-$(uname -r)
 ./VBoxLinuxAdditions.run
 </p>
 </li>
+</ol>
+<strong>Notes:</strong>
+<ol type=a>
+<p class="description">
+<li>
+If you can not execute VBoxLinuxAdditions.run, it is likely because your system has an entry in /etc/fstab for the ISO without the <span class=cmd>exec</span> option.  If this is the case: add <span class=cmd>exec</span> to the fstab line; umount the ISO; mount the IS0
+</li>
+</p>
+</li>
 <li>Note: updating the kernel, apt upgrade, usually means you need to rebuild the Guest Additions.
 </li>
 </ol>
