@@ -52,6 +52,7 @@ do
             ;;
         *)
             usage 1
+			;;
     esac
 done
 
@@ -67,6 +68,7 @@ case $1 in
         ;;
     *)
         usage 1 "up or down required"
+		;;
 esac
 
 
