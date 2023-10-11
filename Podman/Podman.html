@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: Podman	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Podman</h1>
+<h2>Introduction</h2>
+<p class="description">
+Podman is an alternative to Docker.  It's main advantage is that it does not require a daemon.  RedHat is Podmans biggest sponsor.
+</p>
+<h3>Reference:</h3>
+<ul>
+<li><a href="https://docs.podman.io/en/latest/">Podman documentation</a> </li>
+<li><a href="https://www.redhat.com/sysadmin/podman-run-pods-systemd-services">RedHat tutorial: systemd services with Podman</a>
+</li>
+</ul>
+<hr>
+<h2>Part A: Set up</h2>
+<ol>
+<li>Import a fresh Bookwork VM (one without Docker installed) </li>
+<li>Configure this VM with an IP address and hostname of your choosing </li>
+<li>Install podman
+<pre class="code">
+apt update
+apt install podman
+</pre>
+</li>
+<li>Test our work by running a familiar container
+<pre class="code">
+podman run docker.io/hello-world
+</pre>
+</li>
+</ol>
+
+<hr>
+<h2>Part B: Run a container as a systemd service</h2>
+<p class="description">
+We will configure the httpd container from Dockerhub to run as a service.
+</p>
+
+<ol>
+<li>Run the httpd container from the command line.
+<pre class="code">
+podman run --rm -p 80:80 -d --name my_apache docker.io/httpd
+</pre>
+</li>
+<li>Check our work
+<pre class="code">
+podman ps
+</pre>
+<pre class="code">
+curl http://localhost
+</pre>
+</li>
+<li>Generate a unit file based on our running httpd container
+<pre class="code">
+podman generate systemd --new --files --name my_apache
+</pre>
+</li>
+<li>Copy the unit file to the systemd directory
+<pre class="code">
+cp /root/container-my_apache.service /etc/systemd/system
+</pre>
+</li>
+<li>Reload the systemd config
+<pre class="code">
+systemctl daemon-reload
+</pre>
+</li>
+<li>Start our new service
+<pre class="code">
+systemctl start container-my_apache.service
+</pre>
+</li>
+<li>Check our work
+<pre class="code">
+systemctl status container-my_apache.service
+</pre>
+<pre class="code">
+podman ps
+</pre>
+<pre class="code">
+ps -eo pid,user,group,args|grep -e 'httpd' -e USER
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part C: Map users</h2>
+<p class="description">
+As you may have notice from the ps command httpd is running as root and www-data.  We can get better isolation by mapping user IDs.
+</p>
+
+<ol>
+<li>Add a line to  <strong>/etc/subuid</strong> 
+<pre class="code">
+containers:200000:65536
+</pre>
+</li>
+<li>Stop the container service </li>
+<li>Edit <strong>/etc/systemd/system/container-my_apache.service</strong> and add the <strong>--userns=auto</strong> option for the podman run command.
+</li>
+<li>Reload the systemd config
+<pre class="code">
+systemctl daemon-reload
+</pre>
+</li>
+<li>Check the mapping
+<pre class="code">
+ps -eo pid,user,group,args|grep -e 'httpd' -e USER
+</pre>
+</li>
+</ol>
+
+<hr>
+<h2>Part D: Deploy trs</h2>
+<p class="description">
+We will deploy our two trs containers in a pod.  All the containers inside a pod share a network name space, meaning that they can communicate with each other using localhost
+</p>
+<ol>
+<li>Create the pod
+<pre class="code">
+podman pod create -p 80:80 trs_pod
+</pre>
+</li>
+</li>Create one service for each trs container
+<ol type=a>
+<li>Use local volumes to persist the DB and to pass config.php to trs </li>
+<li>Place both containers in the trs_pod by specifying <span class=cmd>--pod=tsr_pod</span> as command line option to <span class=cmd>podman run</span> in each systemd unit file.
+</li>
+<li>Note: remove any port mapping options from the <span class=cmd>podman run</span> commands unit files.  </li>
+<li>Note: use 127.0.0.1 in config.php, <em>localhost</em> did not work in testting
+</li>
+</ol>
+</li>
+</ol>
+<hr>
+<h2>Part E: Grading</h2>
+<p class="description">
+Submit your two systemd unit files to the dropbox.
+</p>
+</body>
+</html>

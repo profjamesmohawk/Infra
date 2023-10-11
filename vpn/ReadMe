@@ -1,0 +1,6 @@
+nft on debian requires module loaded for logging
+ modprobe nfnetlink_log
+ ??? how to unload
+
+
+
