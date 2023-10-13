@@ -1,0 +1,75 @@
+<html>
+<head>
+<style type="text/css">
+table { margin: 1em; border-collapse: collapse; }
+td, th { padding: .3em; border: 2px #ccc solid; }
+</style>
+</head>
+<body><table>
+<h2> DRBD Host Info Report </h2>
+<tr>
+<td valign="top"> Hostname </td>
+<td><pre>
+ 
+d01
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> Look at the resource files </td>
+<td><pre>
+ 
+/etc/drbd.d/r0.res
+resource r0 {
+	on d01 {
+		device /dev/drbd1;
+		disk   /dev/sdb1;
+		address 10.1.1.101:7789;
+		meta-disk internal;
+	}
+	on d02 {
+		device /dev/drbd1;
+		disk   /dev/sdb1;
+		address 10.1.1.102:7789;
+		meta-disk internal;
+	}
+}
+<hr>
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> drbdadm status </td>
+<td><pre>
+ 
+r0 role:Primary
+  disk:UpToDate
+  d02 role:Secondary
+    peer-disk:UpToDate
+
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> /proc/drbd </td>
+<td><pre>
+ 
+version: 9.1.11 (api:2/proto:86-121)
+GIT-hash: ba3a5505c843e1dae30f8307ce918f24255e0dad build by root@d01, 2022-09-05 15:50:25
+Transports (api:18): tcp (9.1.11)
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> Mounts </td>
+<td><pre>
+ 
+ 
+</pre>
+</td>
+</tr>
+</table></body></html>

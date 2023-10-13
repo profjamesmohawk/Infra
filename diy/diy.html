@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Container DIY	</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Container DIY (Do It Yourself)</h1>
+<p class="description">
+Today will will investigate the Kernel features that enable containers.
+</p>
+
+<hr>
+<h2>Part A: COW files ystems</h2>
+<p class="description">
+Copy on Write file systems, like the Overlay file system, are used to build a file system built from layers.
+</p>
+
+<ol>
+<li>Create the directories we will layer
+<pre class="code">
+mkdir /ofs
+cd /ofs
+mkdir lower upper work merged
+</pre>
+</li>
+<li>Create some sample files
+<pre class="code">
+echo "file one" > /ofs/lower/f1
+echo "file two" > /ofs/lower/f2
+</pre>
+</li>
+<li>Mount the layered fs at /ofs/mount
+<pre class="code">
+mount -t overlay overly -o lowerdir=/ofs/lower,upperdir=/ofs/upper,workdir=/ofs/work /ofs/merged/
+</pre>
+</li>
+<li>Check our work
+<pre class="code">
+df
+</pre>
+<pre class="code">
+ls -ld   /ofs/*/*
+</pre>
+</li>
+<li>Demonstrate functionality.  (Run  <span class=cmd>ls -ld /ofs/*/*</span> after each step)
+
+<ol type="a">
+<li>Create <span class=cmd>/ofs/upper/f3</span> </li>
+<li>Edit <span class=cmd>/ofs/upper/f1</span> and change "one" to "1" </li>
+<li>Remove <span class=cmd>/ofs/upper/f2</span>
+</li>
+</ol>
+</li>
+<li>Reference: 
+<ul>
+	<li><a href="https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html">Overlay FS from kernel.org</a> </li>
+	<li><a href="https://wiki.archlinux.org/title/Overlay_filesystem">Overlay FS from arch</a>
+	</li>
+</ul>
+</li>
+</ol>
+
+
+<hr>
+<h2>Part B: cgroups</h2>
+<p class="description">
+The control group Linux kernel mechanism allows system resources to be allocated across groups of processes. 
+</p>
+<p class="description">
+Today we will use systemd and cgroups to guard against fork bombs.
+</p>
+
+<ol>
+<li>Create a unit file <span class=cmd>/etc/systemd/system/myslice.slice</span>
+<pre class="code">
+[Unit]
+Description=slice for testing 
+Documentation=man:systemd.special(7)
+
+[Slice]
+TasksMax=5
+</pre>
+</li>
+<li>Execute a shell in our slice
+<pre class="code">
+systemd-run --slice=my_slice.slice --shell
+</pre>
+</li>
+<li>Show our current cgroup
+<pre class="code">
+cat /proc/self/cgroup
+</pre>
+</li>
+<li>Run a <a href="./fork_bomb.sh">fork_bomb.sh</a> </li>
+<li>Exit to a default session
+<pre class="code">
+exit
+</pre>
+</li>
+<li>Run the fork_bomb without our process limit (you may need to reboot to recover)
+</li>
+
+<li> Reference:
+<ul>
+<li> <a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html">cgroup documentation on kernel.org</a> </li>
+<li> <a href="https://wiki.archlinux.org/title/cgroups">cgroups documentation from achlinux</a>
+</li>
+<li> <a href="https://man.archlinux.org/man/systemd.resource-control.5.en"> man systemd.resource-control</a></li>
+</ul>
+</li>
+</ol>
+
+<hr>
+<h2>Part C: namespaces</h2>
+<p class="description">
+Namespaces are used to limit what a process can "see"
+</p>
+
+<ol>
+<li>Complete the Namespaces section of this <a href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/">guide from NGNX</a>
+</li>
+<li>You are encouraged to experiment by running the example unshare command with no options and then adding the options from the lab one by one and investigating what each does.  <em>Please consider this an optional activity.</em>
+</li>
+<li> Reference:
+<ul>
+<li>
+<a href="https://man.archlinux.org/man/unshare.1.en">unshare man page from arch</a>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Part D: Grading</h2>
+<p class="description">
+<em>Coming soon</em>
+<!--
+Complete the quiz.
+-->
+</p>
+
+</body>
+</html>

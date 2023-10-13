@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Deploy to Azure</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: Deploy to Azure </h1>
+<p class="description">
+Today we will deploy the trs application to a shared tenancy service bureau.  The lab references Azure.  Azure was chosen because all Mohawk students are entitled to a $100US credit, which should be sufficient. 
+</p>
+<h2>FAQ</h2>
+<ol>
+<li><strong>Can I use X instead of Azure?</strong>  Yes.  </li>
+<li><strong>I am out of credit, do I have to do this lab?</strong> No.  You can earn equivalent points by completing the DRBD lab.
+</li>
+</ol>
+<hr>
+<h2>Part A: Set up</h2>
+<ol>
+<li>Sign into <a href="https://azureforeducation.microsoft.com/devtools">Azure for Education</a> </li>
+</ol>
+<hr>
+<h2>Part B: Run our first container</h2>
+<ol>
+<li>Complete the <em>Deploy a Docker container</em> guide found under <strong>Popular Solutions</strong> or try <a href="https://learn.microsoft.com/en-ca/azure/container-instances/container-instances-quickstart-portal">this link</a>
+<ul>
+<li>Use your trsweb container (docker.io/YOUR_DOCKER_ID/trsweb </li>
+<li>Test your deployment by browsing to your container's public IP address </li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Part C: Deploy the full trs application</h2>
+<ol>
+
+<li>Use this tutorial, <a href="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/container-instances/container-instances-multi-container-yaml.md">Deploy a multi-container group using a YAML file.</a>, as a guide.
+</li>
+
+<ul>
+<li>Use DB storage local to the trsdb container for simplicity.  </li>
+<li>You man need to set an environment variable: <a href="https://learn.microsoft.com/en-us/azure/container-instances/container-instances-environment-variables">Set envrionment variables in containers.</a>
+</li>
+<li>Container host name resolution works like it does in podman.  </li>
+</ul>
+</li>
+</ol>
+
+<hr>
+<h2>Part D: Grading</h2>
+<p class="description">
+Demonstrate your working application to your instructor, or submit a short video.
+</p>
+
+<hr>
+<h2>Part E: Suggested exercises</h2>
+<p class="description">
+Here are some suggested activities to help you build your <em>cloud</em> deployment skills.
+</p>
+<p class="description">
+These exercises are not graded.  You instructor will provide support where feasible.
+</p>
+
+<ol type="a">
+<li>Modify your Azure deployment to:
+<ul>
+<li>Use a volume to persist the DB </li>
+<li>Use a managed DB instance in place of the trsdb container </li>
+<li>Deploy multiple trsweb containers with load balancing </li>
+<li>Deploy trsweb to Azure, accessing an on prem DB server over a VPN </li>
+</ul>
+</li>
+<li>Comparison shop:
+<ul>
+<li>Repeat your deployment on a competing service (AWS, DigitalOcean, Google, ...) </li>
+</ul>
+</li>
+</ol>
+
+</body>
+</html>

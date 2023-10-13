@@ -1,0 +1,79 @@
+<html>
+<head>
+<style type="text/css">
+table { margin: 1em; border-collapse: collapse; }
+td, th { padding: .3em; border: 2px #ccc solid; }
+</style>
+</head>
+<body><table>
+<h2> DRBD Host Info Report </h2>
+<tr>
+<td valign="top"> Hostname </td>
+<td><pre>
+ 
+luke
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> Look at the resource files </td>
+<td><pre>
+ 
+/etc/drbd.d/r0.res
+resource r0 {
+  on luke {
+    device    /dev/drbd1;
+    disk      /dev/sdb;
+    address   10.1.1.101:7789;
+    meta-disk internal;
+  }
+  on yoda {
+    device    /dev/drbd1;
+    disk      /dev/sdb;
+    address   10.1.1.102:7789;
+    meta-disk internal;
+  }
+}
+<hr>
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> drbdadm status </td>
+<td><pre>
+ 
+r0 role:Primary
+  disk:Inconsistent
+  peer role:Secondary
+    replication:SyncTarget peer-disk:UpToDate done:45.31
+
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> /proc/drbd </td>
+<td><pre>
+ 
+version: 8.4.11 (api:1/proto:86-101)
+srcversion: 488C1124B879DCE7CD031DA 
+
+ 1: cs:SyncTarget ro:Primary/Secondary ds:Inconsistent/UpToDate C r-----
+    ns:292 nr:3592096 dw:3591844 dr:2365 al:3 bm:0 lo:0 pe:6 ua:0 ap:0 ep:1 wo:f oos:4587740
+	[=======>............] sync'ed: 44.0% (4480/7984)M
+	finish: 0:02:11 speed: 34,752 (24,768) want: 41,040 K/sec
+ 
+</pre>
+</td>
+</tr>
+<tr>
+<td valign="top"> Mounts </td>
+<td><pre>
+ 
+ 
+</pre>
+</td>
+</tr>
+</table></body></html>
