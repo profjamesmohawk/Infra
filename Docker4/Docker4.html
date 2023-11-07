@@ -116,11 +116,13 @@ Each instance must be independent - reservations made in one instance must not a
 <pre class="code">
 services:
     web:
-        image: trsweb
+        image: jameslongmohawk/trsweb
+        environment:
+            TRS_DB_HOST: db
         ports:
             - 80:80
     db:
-        image: trsdb
+        image: jameslongmohawk/trsdb
         environment:
             MYSQL_ROOT_PASSWORD: beer
 </pre>
