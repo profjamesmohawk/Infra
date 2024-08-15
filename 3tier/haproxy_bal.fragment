@@ -1,0 +1,5 @@
+backend web-backend
+   balance roundrobin
+   cookie SERVERID insert indirect nocache
+   server web01 10.1.1.201:80 check cookie web01
+   server web02 10.1.1.202:80 check cookie web02

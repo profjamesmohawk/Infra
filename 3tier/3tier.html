@@ -108,10 +108,10 @@ exit
 </li>
 <li>Run the SQL supplied by the developers (these commands should run silently)
 <pre class="code">
-mariadb < build_trs_db.sql
-mariadb < add_users.sql
-mariadb < add_reservations.sql
-mariadb < create_mysql_trs_user.sql
+mariadb < 01_build_trs_db.sql
+mariadb < 02_add_users.sql
+mariadb < 03_add_reservations.sql
+mariadb < 04_create_mysql_trs_user.sql
 </pre>
 </li>
 <li>Check that the DB was built, by logging on as the newly created DB user trs_user.  Look in create_mysql_trs_user.sql to determine the password.
