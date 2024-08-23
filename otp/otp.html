@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  	<link rel="stylesheet" href="../jbl_labs.css"> 
+  	<title>
+		Lab: OTP</title>
+<script type="text/javascript">
+ 	function unhide(divID) {
+ 		var item = document.getElementById(divID);
+ 		if (item) {
+ 			item.className=(item.className=='hidden')?'unhidden':'hidden';
+ 		}
+	}
+ </script>
+  
+</head>
+
+<body>
+<h1>Lab: OTP</h1>
+<h2>Introduction</h2>
+<p class="description">
+The TOTP (Time-Based One-Time Password) algorithm is defined in <a href="https://www.rfc-editor.org/rfc/rfc6238">RFC 6238</a>.  We will use open source implementations.  Onetime passwords will be generated with oathtool and validated by the PAM module pam_oath. 
+</p>
+<p class="description">
+The initiative is driven by the "Initiative for Open Authentication"(OATH), and industry group.
+</p>
+<img src="./otp.png" alt="Lab Diagram">
+<p class="description">
+For best results s01 should be a Debian 12 server with two users: root and alice. Your instructor can supply a suitable VM.  
+</p>
+<hr>
+
+<h2>Part A: Install the tools</h2>
+<ol>
+<li>Install the PAM module on <strong>s01</strong>
+<pre class="code">
+apt update
+apt install libpam-oath
+</pre>
+</li>
+<li>Install  oathtool on w01
+<pre class="code">
+apt update
+apt install oathtool
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part B: Setup the OATH </h2>
+<p class="description">
+OATH TOTP relies on shared secrets.  We will create one for alice.  Alice will need this secret to generate passwords.
+</p>
+<ol>
+<li>Generate a random secret
+<pre class="code">
+openssl rand -hex 10
+.................................
+12345678909876543210
+</pre>
+</li>
+<li>Add a line for alice in <strong>/etc/users.oath</strong> using the secret you just generated.
+<pre class="code">
+HOTP/T30/6 alice - 12345678909876543210
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part C: Configure PAM</h2>
+<ol>
+<li>Require OTP for direct logon.  Add this line to <strong>/etc/pam.d/login</strong> immediately below <em>@include common-auth</em>
+<pre class="code">
+auth	  required pam_oath.so usersfile=/etc/users.oath window=30 digits=6
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part D: Login with OTP</h2>
+<ol>
+<li>Logon to the console of s01 as alice.  You should be prompted for a one time password.
+</li>
+<li>On w01, or any system, generate a password with oathtool.  The last 6 digits is the password.
+<pre class="code">
+oathtool -v --totp -d 6 12345678909876543210
+</pre>
+</li>
+</ol>
+<hr>
+<h2>Part E: Use an authenticator app </h2>
+<p class="description">
+<strong>Note:</strong> This section is optional
+</p>
+<p class="description">
+The oathtool command is useful for testing, but a dedicated authenticator application should do a better job of keeping our secret safe.  These steps have been tested with the Microsoft Authentictor app on iOS. 
+</p>
+
+<ol>
+<li>Generate a QR code for the app to read
+<pre class="code">
+# relace DK2DEFASV26A==== with alice's Base32 secret
+qrencode -t UTF8 'otpauth://totp/alice@s01?secret=DK2DEFASV26A===='
+</pre>
+note: the base 32 encoded secret is displayed when you generate a password with oathtool
+</li>
+<li>Add the secret to you authenticator app
+</li>
+</ol>
+
+<hr>
+<h2>Part F: Configure ssh to use OTP</h2>
+<ol>
+<li>Add to /etc/pam.d/sshd (immediately after <em>@include common-auth</em>)
+<pre class="code">
+auth	  required pam_oath.so usersfile=/etc/users.oath window=30 digits=6
+</pre>
+</li>
+<li>Update the sshd configuration, making sure
+<pre class="code">
+KbdInteractiveAuthentication yes
+UsePAM yes
+</pre>
+</li>
+<li>Test our work by logging with ssh as alice </li>
+</ol>
+<hr>
+<h2>Grading</h2>
+<p class="description">
+Demonstrate your work to you instructor.
+</p>
+<hr>
+<h2>Optional Exercises</h2>
+<ul type=none>
+<li>Require an OTP for the <span class=cmd>su</span> command.  </li>
+<li>Add and entry for root in /etc/users.oath </li>
+<li>Require both a key pair and an OTP for ssh access.  Hint...
+<pre class="code">
+# /etc/ssh/sshd_config
+
+AuthenticationMethods publickey,keyboard-interactive:pam
+KbdInteractiveAuthentication yes
+PasswordAuthentication yes
+</pre>
+</li>
+</ul>
+<hr>
+<h2>Reference</h2>
+<ul type="none">
+
+<li>This tutorial is based closely on <a href="https://wiki.archlinux.org/title/Pam_oath">ArchWiki: pam_oath</a>
+</li>
+<li>This <a href="https://csunix.mohawkcollege.ca/~long/courses/Infra/RackAndStack/Debian.html">Debian survival guide</a> from the Containers course will help, if you are new to Debian.
+</li>
+</ul>
+</body>
+</html>
