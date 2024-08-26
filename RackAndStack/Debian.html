@@ -79,17 +79,39 @@ apt install curl
 </pre>
 </li>
 </ol>
+<hr>
+<h2>Part C: Make the console smaller</h2>
+<p class="description">
+Debian Bookworm is configured with a large virtual console window.  We can turn this off by passing the kernel the <span class=cmd>nomodeset</span> option.
+</p>
+<ol>
+<li>Change /etc/defualt/grub like this
+<pre class="code">
+GRUB_CMDLINE_LINUX_DEFAULT="nomodeset"
+</pre>
+</li>
+<li>
+<pre class="code">
+grub-mkconfig  -o /boot/grub/grub.cfg
+</pre>
+</li>
+</ol>
 
 <hr>
-<h2>Part C: Install a GUI (only required if you want a debian workstation)</h2>
+<h2>Part D: Install a GUI (only required if you want a debian workstation)</h2>
 
 <ol>
 <li>Install a debian task package (package that groups other packages)
 <pre class="code">
 apt update
 apt install task-xfce-desktop
+
+# Or for GNOME
+# apt install task-gnome-desktop
+
+# Or for a minimal desktop
+# apt install xfce4 firefox-esr xfce-terminal vim
 </pre>
-Note: If you prefer gnome use task-gnome-desktop
 </li>
 <li>reboot </li>
 <li>Install VBox Guest Additions (as described on <a href="https://wiki.debian.org/NetworkConfiguration">debian Wiki)</a>

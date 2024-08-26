@@ -20,10 +20,10 @@
 <h1>Lab: OTP</h1>
 <h2>Introduction</h2>
 <p class="description">
-The TOTP (Time-Based One-Time Password) algorithm is defined in <a href="https://www.rfc-editor.org/rfc/rfc6238">RFC 6238</a>.  We will use open source implementations.  Onetime passwords will be generated with oathtool and validated by the PAM module pam_oath. 
+The TOTP (Time-Based One-Time Password) algorithm is described  in <a href="https://www.rfc-editor.org/rfc/rfc6238">RFC 6238</a>.  We will use open source implementations.  Onetime passwords will be generated with oathtool and validated by the PAM module pam_oath. 
 </p>
 <p class="description">
-The initiative is driven by the "Initiative for Open Authentication"(OATH), and industry group.
+The initiative is driven by the "Initiative for Open Authentication"(OATH), and industry group.  That is where the 'oath' in oathtool comes from.
 </p>
 <img src="./otp.png" alt="Lab Diagram">
 <p class="description">
@@ -100,7 +100,7 @@ The oathtool command is useful for testing, but a dedicated authenticator applic
 # relace DK2DEFASV26A==== with alice's Base32 secret
 qrencode -t UTF8 'otpauth://totp/alice@s01?secret=DK2DEFASV26A===='
 </pre>
-note: the base 32 encoded secret is displayed when you generate a password with oathtool
+note: the Base32 encoded secret is displayed when you generate a password with oathtool
 </li>
 <li>Add the secret to you authenticator app
 </li>
@@ -129,7 +129,7 @@ Demonstrate your work to you instructor.
 </p>
 <hr>
 <h2>Optional Exercises</h2>
-<ul type=none>
+<ul>
 <li>Require an OTP for the <span class=cmd>su</span> command.  </li>
 <li>Add and entry for root in /etc/users.oath </li>
 <li>Require both a key pair and an OTP for ssh access.  Hint...
